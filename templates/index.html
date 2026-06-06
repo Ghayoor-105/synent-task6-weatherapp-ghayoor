@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="app-wrapper">
+
+    <!-- Header -->
+    <header>
+      <div class="logo">⛅ WeatherApp</div>
+      <div class="date-time">{{ weather.date if weather else '' }}</div>
+    </header>
+
+    <!-- Search Section -->
+    <div class="search-section">
+      <h1>Real-Time <span class="accent">Weather</span></h1>
+      <p class="subtitle">Enter any city to get live weather data</p>
+
+      <form method="POST" class="search-form">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            name="city"
+            placeholder="Search city... e.g. London, Karachi"
+            value="{{ city }}"
+            autocomplete="off"
+            required
+          >
+          <button type="submit">Search</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Error Message -->
+    {% if error %}
+    <div class="error-box">
+      ⚠️ {{ error | capitalize }}
+    </div>
+    {% endif %}
+
+    <!-- Weather Result -->
+    {% if weather %}
+    <div class="weather-card">
+
+      <!-- Top Section -->
+      <div class="weather-top">
+        <div class="location-info">
+          <h2>📍 {{ weather.city }}, {{ weather.country }}</h2>
+          <p class="weather-date">{{ weather.date }} — {{ weather.time }}</p>
+          <p class="description">{{ weather.description }}</p>
+        </div>
+        <div class="weather-icon-box">
+          <img src="https://openweathermap.org/img/wn/{{ weather.icon }}@4x.png" alt="{{ weather.description }}">
+        </div>
+      </div>
+
+      <!-- Temperature -->
+      <div class="temp-section">
+        <div class="main-temp">{{ weather.temp }}°C</div>
+        <div class="feels-like">Feels like {{ weather.feels_like }}°C</div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">💧</div>
+          <div class="stat-value">{{ weather.humidity }}%</div>
+          <div class="stat-label">Humidity</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💨</div>
+          <div class="stat-value">{{ weather.wind_speed }} m/s</div>
+          <div class="stat-label">Wind Speed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🌡️</div>
+          <div class="stat-value">{{ weather.pressure }} hPa</div>
+          <div class="stat-label">Pressure</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">👁️</div>
+          <div class="stat-value">{{ weather.visibility }} km</div>
+          <div class="stat-label">Visibility</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🌅</div>
+          <div class="stat-value">{{ weather.sunrise }}</div>
+          <div class="stat-label">Sunrise</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🌇</div>
+          <div class="stat-value">{{ weather.sunset }}</div>
+          <div class="stat-label">Sunset</div>
+        </div>
+      </div>
+
+    </div>
+    {% endif %}
+
+    <!-- Default State -->
+    {% if not weather and not error %}
+    <div class="default-state">
+      <div class="default-icon">🌍</div>
+      <h3>Search for a city</h3>
+      <p>Get real-time weather data for any city in the world</p>
+      <div class="popular-cities">
+        <p>Popular cities:</p>
+        <div class="city-tags">
+          <form method="POST"><button name="city" value="Karachi" type="submit">🇵🇰 Karachi</button></form>
+          <form method="POST"><button name="city" value="London" type="submit">🇬🇧 London</button></form>
+          <form method="POST"><button name="city" value="Dubai" type="submit">🇦🇪 Dubai</button></form>
+          <form method="POST"><button name="city" value="New York" type="submit">🇺🇸 New York</button></form>
+          <form method="POST"><button name="city" value="Tokyo" type="submit">🇯🇵 Tokyo</button></form>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <footer>Built with Flask & OpenWeatherMap API — Synent Internship Task 6</footer>
+
+  </div>
+
+</body>
+</html>
